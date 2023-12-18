@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	db "github.com/jlkwarteng/comments-app/internal/database"
@@ -16,7 +15,8 @@ func Run() error {
 		return err
 	}
 
-	if err := db.Ping(context.Background()); err != nil {
+	if err := db.MigrateDB(); err != nil {
+		fmt.Println("Failed to Migrate Database")
 		return err
 	}
 	fmt.Println("Successfully Connected and Pinged Database ")
