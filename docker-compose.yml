@@ -25,7 +25,7 @@ services:
       - DB_DB=postgres
       - DB_TABLE=postgres
       - DB_PORT=5432
-      - SSL_MODE=disabled
+      - SSL_MODE=disable
 
     ports:
       - "8080:8080"
