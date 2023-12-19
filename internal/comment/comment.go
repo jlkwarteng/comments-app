@@ -9,7 +9,7 @@ import (
 
 // Comment - A representation of the comment structure for our service
 type Comment struct {
-	Id     int
+	Id     string
 	Slug   string
 	Body   string
 	Author string
@@ -27,9 +27,9 @@ type Service struct {
 
 type Store interface {
 	GetComment(context.Context, string) (Comment, error)
-	createComment(context.Context, Comment) (Comment, error)
-	updateComment(context.Context, Comment) error
-	deleteComment(context.Context, string) error
+	CreateComment(context.Context, Comment) (Comment, error)
+	UpdateComment(context.Context, string, Comment) error
+	DeleteComment(context.Context, string) error
 }
 
 // NewService - is used to instantiate a new Service by returning a pointer to a new service
@@ -39,7 +39,7 @@ func NewService(store Store) *Service {
 	}
 }
 
-func (s *Service) getComment(ctx context.Context, id string) (Comment, error) {
+func (s *Service) GetComment(ctx context.Context, id string) (Comment, error) {
 	fmt.Println("Retrieving a comment ")
 	comm, err := s.Store.GetComment(ctx, id)
 	if err != nil {
@@ -49,14 +49,30 @@ func (s *Service) getComment(ctx context.Context, id string) (Comment, error) {
 	return comm, nil
 }
 
-func (s *Service) updateComment(ctx context.Context, cmt Comment) error {
-	return ErrorNotImplemented
+func (s *Service) UpdateComment(ctx context.Context, Id string, cmt Comment) (Comment, error) {
+	err := s.Store.UpdateComment(ctx, Id, cmt)
+	if err != nil {
+		return Comment{}, fmt.Errorf("Failed to update Comment", err)
+	}
+
+	return Comment{}, nil
+
 }
 
-func (s *Service) createComment(ctx context.Context, cmt Comment) (Comment, error) {
-	return Comment{}, ErrorNotImplemented
+func (s *Service) CreateComment(ctx context.Context, cmt Comment) (Comment, error) {
+	comment, err := s.Store.CreateComment(ctx, cmt)
+	if err != nil {
+		return Comment{}, fmt.Errorf("Error Creating Comment %w", err)
+	}
+	return comment, nil
+
 }
 
-func (s *Service) deleteComment(ctx context.Context, id string) error {
-	return ErrorNotImplemented
+func (s *Service) DeleteComment(ctx context.Context, id string) error {
+	err := s.Store.DeleteComment(ctx, id)
+	if err != nil {
+		return fmt.Errorf("Failed To Delete Comment ")
+	}
+	return nil
+
 }
