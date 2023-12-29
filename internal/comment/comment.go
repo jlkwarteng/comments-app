@@ -33,7 +33,7 @@ type Store interface {
 }
 
 // NewService - is used to instantiate a new Service by returning a pointer to a new service
-func NewService(store Store) *Service {
+func   NewService(store Store) *Service {
 	return &Service{
 		Store: store,
 	}
