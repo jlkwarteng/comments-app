@@ -33,7 +33,7 @@ type Store interface {
 }
 
 // NewService - is used to instantiate a new Service by returning a pointer to a new service
-func   NewService(store Store) *Service {
+func NewService(store Store) *Service {
 	return &Service{
 		Store: store,
 	}
@@ -52,7 +52,7 @@ func (s *Service) GetComment(ctx context.Context, id string) (Comment, error) {
 func (s *Service) UpdateComment(ctx context.Context, Id string, cmt Comment) (Comment, error) {
 	err := s.Store.UpdateComment(ctx, Id, cmt)
 	if err != nil {
-		return Comment{}, fmt.Errorf("Failed to update Comment", err)
+		return Comment{}, fmt.Errorf("Failed to update Comment %w", err)
 	}
 
 	return Comment{}, nil

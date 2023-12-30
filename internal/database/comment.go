@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/jlkwarteng/comments-app/internal/comment"
 	uuid "github.com/satori/go.uuid"
@@ -55,18 +56,19 @@ func (d *Database) CreateComment(ctx context.Context, comm comment.Comment) (com
 	if err := rows.Close(); err != nil {
 		return comment.Comment{}, fmt.Errorf("Failed to close rows %w ", err)
 	}
-
+	log.Println("THIS IS COMMENT ID", comm.Id)
 	return comm, nil
 }
 func (d *Database) UpdateComment(ctx context.Context, id string, comm comment.Comment) error {
 
 	updateRow := CommentRow{
+		ID:     id,
 		Slug:   sql.NullString{comm.Slug, true},
 		Body:   sql.NullString{comm.Body, true},
 		Author: sql.NullString{comm.Author, true},
 	}
 
-	rows, err := d.Client.NamedQueryContext(ctx, `UPDATE comment comment set body = :id, slug= :slug, author= :author where id = :id`, updateRow)
+	rows, err := d.Client.NamedQueryContext(ctx, `UPDATE comments  SET body = :body, slug= :slug, author= :author where id = :id`, updateRow)
 	if err != nil {
 		return fmt.Errorf("Error in update Comment %w", err)
 	}
